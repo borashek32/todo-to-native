@@ -3,7 +3,7 @@ import {TaskType} from "./../../../../features/todolists/Todolist/tasks.types"
 import {TaskStatuses} from "./../../../../common/enums/common.enums"
 import {tasksThunks} from "./../../../../features/todolists/Todolist/tasks.slice"
 import {useAppDispatch} from "./../../../../common/hooks/use-app-dispatch"
-import {StyleSheet, Text, View} from "react-native"
+import {StyleSheet, View} from "react-native"
 import {CustomButton} from "../../../../common/components/CustomButtons/CustomButton"
 import BouncyCheckbox from "react-native-bouncy-checkbox"
 import {EditableSpan} from "./../../../../common/components/EditableSpan/EditableSpan";

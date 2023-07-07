@@ -2,8 +2,7 @@ import {StyleSheet, View} from "react-native"
 import React, {FC} from "react"
 import {CustomButton} from "../../../../common/components/CustomButtons/CustomButton"
 import {EditableSpan} from "./../../../../common/components/EditableSpan/EditableSpan"
-import {todolistsThunks} from "./../../../../features/todolists/todolists.slice";
-import {useAppDispatch} from "./../../../../common/hooks/use-app-dispatch";
+import {useTitle} from "./../../../../features/todolists/Todolist/Title/hooks/useTitle"
 
 
 type Props = {
@@ -14,17 +13,13 @@ type Props = {
 
 export const Title: FC<Props> = ({ todoId, todoTitle,  callback }) => {
 
-  const dispatch = useAppDispatch()
-
-  const changeTodolistTitle = (title: string) => {
-    dispatch(todolistsThunks.changeTodolistTitle({id: todoId, title}))
-  }
+  const { changeTodolistTitle } = useTitle()
 
   return (
     <View style={styles.todoTitleWrapper}>
       <EditableSpan
         value={todoTitle}
-        onChange={changeTodolistTitle}
+        onChange={(title) => changeTodolistTitle(todoId, title)}
       />
 
       <CustomButton
