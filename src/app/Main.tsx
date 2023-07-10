@@ -5,7 +5,7 @@ import {useDispatch} from "react-redux"
 import {appThunks} from "./app.slice"
 import {useAppSelector} from "./../common/hooks/use-app-selector"
 import {selectAppIsInitialized, selectStatus} from "./../app/app.selectors"
-import {StyleSheet, Text, View} from "react-native"
+import {ScrollView, StyleSheet, Text, View} from "react-native"
 import {Nav} from "./../common/components/Nav/Nav";
 
 type PropsType = {
@@ -32,29 +32,29 @@ function Main({ demo = false }: PropsType) {
   }
 
   return (
-      <View>
+      <ScrollView>
         <View>
           <Nav />
           <ErrorSnackbar />
           <View style={styles.titleWrapper}>
-            <Text style={styles.title}>Smart Task Manager</Text>
+            <Text style={styles.title}>Task Manager</Text>
           </View>
           <View style={styles.layout}>
             <TodolistsList />
           </View>
           {status === "loading" && <Text>Loading...</Text>}
         </View>
-      </View>
+      </ScrollView>
   )
 }
 
 export default Main
 
 const styles = StyleSheet.create({
-  loading: { 
-    top: "30%", 
-    textAlign: "center", 
-    width: "100%" 
+  loading: {
+    top: "30%",
+    textAlign: "center",
+    width: "100%"
   },
   layout: {
     padding: 20

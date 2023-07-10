@@ -1,65 +1,52 @@
-import React, {useCallback, useEffect} from "react"
+import React, {useEffect} from "react"
 import {AddItemForm} from "./../../../common/components/AddItemForm/AddItemForm"
 import {Task} from "./../../../features/todolists/Todolist/Task/Task"
-import {useAppDispatch} from "./../../../common/hooks/use-app-dispatch"
-import {FilterValuesType, TodolistDomainType} from "./../../../features/todolists/todolists.types"
+import {TodolistDomainType} from "./../../../features/todolists/todolists.types"
 import {TaskType} from "./../../../features/todolists/Todolist/tasks.types"
-import {tasksThunks} from "./../../../features/todolists/Todolist/tasks.slice"
 import {TaskStatuses} from "./../../../common/enums/common.enums"
-import {todolistsActions, todolistsThunks} from "./../../../features/todolists/todolists.slice"
-import {StyleSheet, Text, View} from "react-native"
+import {StyleSheet, View} from "react-native"
 import {Title} from "./../../../features/todolists/Todolist/Title/Title"
 import {CustomButton} from "../../../common/components/CustomButtons/CustomButton"
+import {useTodolist} from "./../../../features/todolists/hooks/useTodolist"
 
 
 type PropsType = {
   todolist: TodolistDomainType
-  tasks: Array<TaskType>
+  tasks: TaskType[]
   demo?: boolean
 }
 
 export const Todolist = React.memo(function ({demo = false, ...props}: PropsType) {
 
-  const dispatch = useAppDispatch()
+  const { getTasks, addTask, removeTodolist, changeFilter } = useTodolist()
 
   useEffect(() => {
     if (demo) {
       return
     }
-    dispatch(tasksThunks.fetchTasks(props.todolist.id))
+    getTasks(props.todolist.id)
   }, [])
-
-  const addTask = useCallback((newValue: string) => {
-    dispatch(tasksThunks.addTask({title: newValue, todolistId: props.todolist.id}))
-  }, [props.todolist.id])
-
-  const removeTodolist = useCallback(() => {
-    dispatch(todolistsThunks.removeTodolist(props.todolist.id))
-  }, [])
-
-  const changeFilter = useCallback((value: FilterValuesType) => {
-    dispatch(todolistsActions.changeTodolistFilter({id: props.todolist.id, filter: value}))
-  }, [props.todolist.id])
 
   let tasksForTodolist = props.tasks
 
   if (props.todolist.filter === "active") {
-    tasksForTodolist = props.tasks.filter((t) => t.status === TaskStatuses.New)
+    tasksForTodolist = props.tasks.filter((task) => task.status === TaskStatuses.New)
   }
   if (props.todolist.filter === "completed") {
-    tasksForTodolist = props.tasks.filter((t) => t.status === TaskStatuses.Completed)
+    tasksForTodolist = props.tasks.filter((task) => task.status === TaskStatuses.Completed)
   }
+
 
   return (
     <View style={styles.todoWrapper}>
       <Title
         todoId={props.todolist.id}
         todoTitle={props.todolist.title}
-        callback={removeTodolist}
+        callback={() => removeTodolist(props.todolist.id)}
       />
 
       <AddItemForm
-        addItem={addTask}
+        addItem={(title) => addTask(props.todolist.id, title)}
         disabled={props.todolist.entityStatus === "loading"}
       />
 
@@ -75,15 +62,15 @@ export const Todolist = React.memo(function ({demo = false, ...props}: PropsType
 
       <View style={styles.todoButtonsWrapper}>
         <CustomButton
-          callback={() => changeFilter('all')}
+          callback={() => changeFilter(props.todolist.id, 'all')}
           title={'All'}
         />
         <CustomButton
-          callback={() => changeFilter('active')}
+          callback={() => changeFilter(props.todolist.id, 'active')}
           title={'Active'}
         />
         <CustomButton
-          callback={() => changeFilter('completed')}
+          callback={() => changeFilter(props.todolist.id, 'completed')}
           title={'Completed'}
         />
       </View>

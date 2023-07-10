@@ -1,12 +1,11 @@
-import React, {useCallback, useState} from "react"
+import React, {useState} from "react"
 import {TaskType} from "./../../../../features/todolists/Todolist/tasks.types"
-import {TaskStatuses} from "./../../../../common/enums/common.enums"
-import {tasksThunks} from "./../../../../features/todolists/Todolist/tasks.slice"
-import {useAppDispatch} from "./../../../../common/hooks/use-app-dispatch"
 import {StyleSheet, View} from "react-native"
 import {CustomButton} from "../../../../common/components/CustomButtons/CustomButton"
 import BouncyCheckbox from "react-native-bouncy-checkbox"
 import {EditableSpan} from "./../../../../common/components/EditableSpan/EditableSpan";
+import {useTask} from "./../../../../features/todolists/Todolist/Task/hooks/useTask";
+import {TaskStatuses} from "./../../../../common/enums/common.enums";
 
 
 type TaskPropsType = {
@@ -16,33 +15,20 @@ type TaskPropsType = {
 
 export const Task = React.memo((props: TaskPropsType) => {
 
-  const dispatch = useAppDispatch()
-
-  const removeTask = useCallback(() => {
-    dispatch(tasksThunks.removeTask({ taskId: props.task.id, todolistId: props.todolistId }))
-  }, [props.task.id, props.todolistId])
-
-  const changeTaskTitle = useCallback( (title: string) => {
-    dispatch(tasksThunks.updateTask({ todolistId: props.todolistId, domainModel: { title: title }, taskId: props.task.id}))
-  }, [props.task.id, props.todolistId])
-
-  // checkbox
-  const [checked, setChecked] = useState(false)
+  const { removeTask, changeTaskTitle, changeStatus } = useTask()
+  const [checked, setChecked] = useState(props.task.status === TaskStatuses.Completed)
 
   const handleChange = () => {
     setChecked(!checked)
-    changeStatus(!checked)
+    changeStatus(props.todolistId, props.task.id, !checked)
   }
-
-  const changeStatus = useCallback( (newIsDoneValue: boolean) => {
-    dispatch(tasksThunks.updateTask({ todolistId: props.todolistId, domainModel: { status: newIsDoneValue ? TaskStatuses.Completed : TaskStatuses.New }, taskId: props.task.id}))
-  }, [props.task.id, props.todolistId])
 
   return (
     <View key={props.task.id} style={styles.taskWrapper}>
       <View style={styles.taskTextWrapper}>
         <BouncyCheckbox
           size={25}
+          isChecked={checked}
           fillColor="blue"
           unfillColor="#FFFFFF"
           iconStyle={{ borderColor: "#000" }}
@@ -52,12 +38,15 @@ export const Task = React.memo((props: TaskPropsType) => {
 
         <EditableSpan
           value={props.task.title}
-          onChange={changeTaskTitle}
+          onChange={(value) => changeTaskTitle(props.task.id, props.todolistId, value)}
         />
       </View>
 
       <View style={styles.buttonsWrapper}>
-        <CustomButton title={'Del'} callback={removeTask} />
+        <CustomButton
+          title={'Del'}
+          callback={() => removeTask(props.task.id, props.todolistId)}
+        />
       </View>
     </View>
   )
