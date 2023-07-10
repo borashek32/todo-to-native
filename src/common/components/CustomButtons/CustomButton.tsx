@@ -1,31 +1,44 @@
-import {StyleSheet, Text, TouchableOpacity} from "react-native"
-import React, {FC, useState} from "react"
-
+import { StyleSheet, Text, TouchableOpacity } from "react-native";
+import React, { FC, useState } from "react";
 
 type Props = {
-  title: string
-  callback?: () => void
-  callbackWithData?: (newTitle: string) => void
-}
+  title: string;
+  callback?: () => void;
+  callbackWithData?: (newTitle: string) => void;
+};
 
 export const CustomButton: FC<Props> = ({ title, callback }) => {
-
   const [isFocused, setIsFocused] = useState(false);
 
-  const handleFocus = () => setIsFocused(true)
+  const handleFocus = () => setIsFocused(true);
 
-  const handleBlur = () => setIsFocused(false)
+  const handleBlur = () => setIsFocused(false);
 
   const buttonWrapperOtherStyles = {
-    borderColor: (title === 'All' || title === "Completed" || title === "Active") ? 'blue' : (title === 'Add' || title === 'Edit' || title === 'Save') ? 'green' : 'red',
-    backgroundColor: (title === 'All' || title === "Completed" || title === "Active") ? '#98e8ff' : (title === 'Add' || title === 'Edit' || title === 'Save') ? '#aeff98' : '#ff9a9a',
-    borderWidth: 1
-  }
+    borderColor:
+      title === "All" ||
+      title === "Completed" ||
+      title === "Active" ||
+      title === "Add"
+        ? "blue"
+        : title === "Edit" || title === "Save"
+        ? "white"
+        : "white",
+    backgroundColor: "#fff",
+    borderWidth: 1,
+  };
 
   const buttonText = {
-    color: '#000'
-  }
-
+    color:
+      title === "All" ||
+      title === "Completed" ||
+      title === "Active" ||
+      title === "Add"
+        ? "blue"
+        : title === "Edit" || title === "Save"
+        ? "green"
+        : "red",
+  };
 
   return (
     <TouchableOpacity
@@ -36,16 +49,17 @@ export const CustomButton: FC<Props> = ({ title, callback }) => {
     >
       <Text style={[styles.buttonText, buttonText]}>{title}</Text>
     </TouchableOpacity>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   buttonWrapper: {
-    borderRadius: 4,
-    backgroundColor: '#d70a0a',
-    padding: 10
+    borderRadius: 3,
+    backgroundColor: "#d70a0a",
+    padding: 10,
+    marginRight: 10,
   },
   buttonText: {
-    color: '#000'
-  }
-})
+    color: "#000",
+  },
+});

@@ -1,24 +1,22 @@
-import React, {FC, useState} from "react"
-import {StyleSheet, Text, TextInput, View} from "react-native"
-import {CustomButton} from "./../../../common/components/CustomButtons/CustomButton";
-
+import React, { FC, useState } from "react";
+import { StyleSheet, Text, TextInput, View } from "react-native";
+import { CustomButton } from "./../../../common/components/CustomButtons/CustomButton";
 
 type Props = {
-  value: string
-  onChange: (title: string) => void
-}
+  value: string;
+  onChange: (title: string) => void;
+};
 
 export const EditableSpan: FC<Props> = ({ value, onChange }) => {
+  let [title, setTitle] = useState(value);
 
-  let [title, setTitle] = useState(value)
-
-  let [editMode, setEditMode] = useState(false)
+  let [editMode, setEditMode] = useState(false);
 
   const changeTitle = () => {
-    setTitle(title)
-    onChange(title)
-    setEditMode(false)
-  }
+    setTitle(title);
+    onChange(title);
+    setEditMode(false);
+  };
 
   return (
     <View>
@@ -32,7 +30,7 @@ export const EditableSpan: FC<Props> = ({ value, onChange }) => {
           />
 
           <CustomButton
-            title={editMode ? 'Save' : 'Edit'}
+            title={editMode ? "Save" : "Edit"}
             callback={changeTitle}
           />
         </View>
@@ -41,32 +39,30 @@ export const EditableSpan: FC<Props> = ({ value, onChange }) => {
           <Text style={styles.taskText}>{value}</Text>
 
           <CustomButton
-            title={editMode ? 'Save' : 'Edit'}
+            title={editMode ? "Save" : "Edit"}
             callback={() => setEditMode(true)}
           />
         </View>
       )}
     </View>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   editableSpanWrapper: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     alignItems: "center",
-    width: 255,
-    gap: 10
   },
   inputText: {
     borderWidth: 1,
     borderRadius: 4,
-    borderColor: '#c4afaf',
+    borderColor: "#c4afaf",
     padding: 10,
     fontSize: 16,
-    flexGrow: 1
+    flexGrow: 1,
   },
   taskText: {
-    fontSize: 16
-  }
-})
+    fontSize: 20,
+  },
+});
