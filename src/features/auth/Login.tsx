@@ -1,6 +1,4 @@
-import React, { useState } from "react";
-import { useAppDispatch } from "./../../common/hooks/use-app-dispatch";
-import { authThunks } from "./../../features/auth/auth.slice";
+import React from "react";
 import {
   KeyboardAvoidingView,
   StyleSheet,
@@ -9,18 +7,13 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { useAuth } from "./../../features/auth/hooks/useAuth";
 
 // borashek@inbox.ru
 // natashapolinaigor
 
 export const Login = () => {
-  const dispatch = useAppDispatch();
-
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const handleLogIn = () =>
-    dispatch(authThunks.login({ email, password, rememberMe: true }));
+  const { email, password, setEmail, setPassword, handleLogin } = useAuth();
 
   return (
     <KeyboardAvoidingView behavior={"padding"} style={styles.container}>
@@ -42,7 +35,10 @@ export const Login = () => {
         />
       </View>
       <View style={styles.buttonsWrapper}>
-        <TouchableOpacity onPress={handleLogIn} style={styles.button}>
+        <TouchableOpacity
+          onPress={() => handleLogin(email, password)}
+          style={styles.button}
+        >
           <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
       </View>
